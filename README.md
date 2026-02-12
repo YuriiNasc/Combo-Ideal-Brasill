@@ -53,3 +53,5 @@ Siga estes passos para registrar o componente na sua **Tool Palette**:
 
 ## 📞 Suporte
 Desenvolvido para atender requisitos de busca dinâmica e lookup simplificado em sistemas legados e modernos.
+
+**Desenvolvido por Yuri Borges**
