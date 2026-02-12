@@ -19,3 +19,6 @@ Componente visual customizado para Delphi que estende o `TCustomComboBox` para o
 1. Abra o arquivo `IdealBuscaCombo.dpk` no seu Delphi.
 2. Clique com o botão direito no projeto e selecione **Install**.
 3. O componente estará disponível na paleta de componentes `IdalBuscaCombo`.
+
+---
+**Desenvolvido por Yuri Borges**

@@ -32,6 +32,7 @@ type
     procedure UpdateItems(const AForceShowAll: Boolean = False);
     function GetKeyValue: Variant;
     procedure SetKeyValue(const Value: Variant);
+    procedure SelectCurrentItem;
   protected
     procedure Change; override;
     procedure KeyDown(var Key: Word; Shift: TShiftState); override;
@@ -224,11 +225,9 @@ end;
 procedure TAppLookupComboBox.Click;
 begin
   inherited Click;
-  if not FUpdatingItems then
+  if not FUpdatingItems and (ItemIndex <> -1) then
   begin
-    FDataLink.Edit;
-    FDataLink.Modified;
-    FIsTyping := False; // Seleção concluída
+    SelectCurrentItem;
   end;
 end;
 
@@ -250,10 +249,34 @@ procedure TAppLookupComboBox.KeyDown(var Key: Word; Shift: TShiftState);
 begin
   if Key = VK_ESCAPE then
   begin
-    Text := '';
+    FUpdatingItems := True;
+    try
+      Text := '';
+      ItemIndex := -1;
+    finally
+      FUpdatingItems := False;
+    end;
     FIsTyping := False;
     UpdateItems(True);
     Key := 0;
+  end
+  else if (Key = VK_DOWN) or (Key = VK_UP) then
+  begin
+    if not DroppedDown then
+    begin
+      DropDown;
+      Key := 0;
+    end;
+  end
+  else if (Key = VK_RETURN) then
+  begin
+    if DroppedDown then
+    begin
+      if ItemIndex <> -1 then
+        SelectCurrentItem;
+      DroppedDown := False;
+      Key := 0;
+    end;
   end;
 
   inherited KeyDown(Key, Shift);
@@ -273,6 +296,25 @@ procedure TAppLookupComboBox.SetListSource(const Value: TDataSource);
 begin
   FListSource := Value;
   if Value <> nil then Value.FreeNotification(Self);
+end;
+
+procedure TAppLookupComboBox.SelectCurrentItem;
+begin
+  FUpdatingItems := True;
+  try
+    if (ItemIndex <> -1) then
+    begin
+      Text := Items[ItemIndex];
+      if (FDataLink.DataSource <> nil) and (FDataLink.FieldName <> '') then
+      begin
+        FDataLink.Edit;
+        FDataLink.Field.Value := GetKeyValue;
+      end;
+    end;
+    FIsTyping := False;
+  finally
+    FUpdatingItems := False;
+  end;
 end;
 
 function TAppLookupComboBox.GetKeyValue: Variant;
@@ -376,6 +418,7 @@ begin
 
     Text := SavedText;
     SelStart := SS;
+    ItemIndex := -1; // Impede o preenchimento automático
     
     // Mostra o dropdown se estiver digitando
     if (SavedText <> '') and not DroppedDown and FIsTyping then
