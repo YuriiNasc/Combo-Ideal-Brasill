@@ -14,13 +14,11 @@ object Form2: TForm2
   OnCreate = FormCreate
   PixelsPerInch = 96
   TextHeight = 13
-  object cbbid: TAppLookupComboBox
+  object combo: TAppLookupComboBox
     Left = 224
     Top = 72
     Width = 145
     Height = 21
-    DataSource = DataSource2
-    DataField = 'id'
     ListSource = DataSource1
     ListField = 'usuario'
     KeyField = 'id'
@@ -99,10 +97,5 @@ object Form2: TForm2
       'select * from usuarios')
     Left = 128
     Top = 112
-  end
-  object DataSource2: TDataSource
-    DataSet = FDQuery2
-    Left = 376
-    Top = 232
   end
 end

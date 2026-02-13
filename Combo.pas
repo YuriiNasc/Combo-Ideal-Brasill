@@ -12,7 +12,7 @@ uses
 type
   TForm2 = class(TForm)
     FDConnection1: TFDConnection;
-    combo: TAppLookupComboBox;
+    cbbid: TAppLookupComboBox;
     DataSource1: TDataSource;
     Consulta: TFDQuery;
     FDQuery2: TFDQuery;
@@ -24,6 +24,7 @@ type
     Consultaadministrador: TBooleanField;
     Consultacriado_em: TDateTimeField;
     Consultaatualizado_em: TDateTimeField;
+    DataSource2: TDataSource;
     procedure FormCreate(Sender: TObject);
   private
     { Private declarations }
@@ -52,6 +53,7 @@ procedure TForm2.FormCreate(Sender: TObject);
 begin
   conexao;
   Consulta.Open;
+  FDQuery2.Open;
   FDQuery2.Append;
 end;
 
